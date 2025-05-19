@@ -1,13 +1,14 @@
 ﻿@page "/weather"
 @inject HttpClient Http
+@using Lab14.Clases
+@inject Blazored.LocalStorage.ISyncLocalStorageService localStorage
 
-<PageTitle>Weather</PageTitle>
+<PageTitle>Vista animales</PageTitle>
 
-<h1>Weather</h1>
+<h1>Aves</h1>
 
-<p>This component demonstrates fetching data from the server.</p>
 
-@if (forecasts == null)
+@if (Listado_Animales1 == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -16,20 +17,57 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
+                <th>Nombre propio</th>
+                <th>Especie</th>
+                <th>Tipo de alimentacion</th>
+                <th>Esperanza de vida</th>
+                <th>¿Puede volar?</th>
+                <th>Periodo de incubacion</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var animal in Listado_Animales1)
             {
                 <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
+                    <td>@animal.nombre_propio</td>
+                    <td>@animal.especie</td>
+                    <td>@animal.tipo_alimentacion</td>
+                    <td>@animal.esperanza_vida</td>
+                    <td>@animal.vuela</td>
+                    <td>@animal.tiempo_incubacion</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<h1>Serpientes: </h1>
+@if (Listado_Animales2 == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre propio</th>
+                <th>Especie</th>
+                <th>Tipo de alimentacion</th>
+                <th>Esperanza de vida</th>
+                <th>¿Es venenoso?</th>
+                <th>Longitud maxima</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var animal in Listado_Animales2)
+            {
+                <tr>
+                    <td>@animal.nombre_propio</td>
+                    <td>@animal.especie</td>
+                    <td>@animal.tipo_alimentacion</td>
+                    <td>@animal.esperanza_vida</td>
+                    <td>@animal.veneno</td>
+                    <td>@animal.largo</td>
                 </tr>
             }
         </tbody>
@@ -37,21 +75,24 @@ else
 }
 
 @code {
-    private WeatherForecast[]? forecasts;
-
+    private List<Aves> Listado_Animales1 = new List<Aves>();
+    private List<Serpientes> Listado_Animales2 = new List<Serpientes>();
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+        var savedStarships = localStorage.GetItem<List<Aves>>("aves");
+
+        if (savedStarships != null)
+        {
+            Listado_Animales1 = savedStarships;
+        }
+
+        var savedStarshipss = localStorage.GetItem<List<Serpientes>>("serpientes");
+
+        if (savedStarshipss != null)
+        {
+            Listado_Animales2 = savedStarshipss;
+        }
     }
 
-    public class WeatherForecast
-    {
-        public DateOnly Date { get; set; }
-
-        public int TemperatureC { get; set; }
-
-        public string? Summary { get; set; }
-
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-    }
+    
 }

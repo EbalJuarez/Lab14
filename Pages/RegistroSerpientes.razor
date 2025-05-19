@@ -1,4 +1,4 @@
-﻿@page "/counter"
+﻿@page "/serpientes"
 @using Lab14.Clases
 @inject Blazored.LocalStorage.ISyncLocalStorageService localStorage
 <PageTitle>Registro aves</PageTitle>
@@ -39,18 +39,18 @@
         </div>
         <div class="row mt-3">
             <div class="col">
-                <label for="classification">¿Vuela?: </label>
-                <InputSelect id="classification" class="form-select form-select-sm" @bind-Value="reganimal.vuela" required>
+                <label for="classification">¿Es venenoso?: </label>
+                <InputSelect id="classification" class="form-select form-select-sm" @bind-Value="reganimal.veneno" required>
                     <option value="">Seleccione una opcion...</option>
-                    <option value="@reganimal.vuela">Si</option>
-                    <option value="@reganimal.vuela">No</option>
+                    <option value="@reganimal.veneno">Si</option>
+                    <option value="@reganimal.veneno">No</option>
                 </InputSelect>
-                <ValidationMessage For="() => reganimal.vuela" />
+                <ValidationMessage For="() => reganimal.veneno" />
             </div>
             <div class="col">
-                <label for="description">Periodo de incubacion: </label>
-                <InputText id="description" class="form-control" @bind-Value="reganimal.tiempo_incubacion" />
-                <ValidationMessage For="() => reganimal.tiempo_incubacion" />
+                <label for="description">Longitud maxima: </label>
+                <InputText id="description" class="form-control" @bind-Value="reganimal.largo" />
+                <ValidationMessage For="() => reganimal.largo" />
             </div>
         </div>
         <p></p>
@@ -64,20 +64,20 @@
 </EditForm>
 
 @code {
-    private List<Aves> Listado_Animales = new List<Aves>();
-    private Aves reganimal = new Aves();
+    private List<Serpientes> Listado_Animales = new List<Serpientes>();
+    private Serpientes reganimal = new Serpientes();
 
 
     private void Guardar()
     {
         Listado_Animales.Add(reganimal);
-        localStorage.SetItem("aves", Listado_Animales);
+        localStorage.SetItem("serpientes", Listado_Animales);
 
     }
 
     protected override async Task OnInitializedAsync()
     {
-        var savedStarships = localStorage.GetItem<List<Aves>>("aves");
+        var savedStarships = localStorage.GetItem<List<Serpientes>>("serpientes");
 
         if (savedStarships != null)
         {
